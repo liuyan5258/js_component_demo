@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>slider</title>
+    <style type="text/css">
+        *{ margin: 0; padding: 0; text-decoration: none;}
+        .m-slide {width: 600px;height: 400px;border:1px solid #333;position: relative;overflow: hidden;}
+        .u-pic {position: absolute;width: 4200px;height: 400px;z-index: 1;}
+        .u-pic img {float: left;}
+        .u-btn {position: absolute;left: 260px;bottom:20px;z-index: 2;}
+        .u-btn span {display: inline-block;cursor:pointer;float:left;width: 10px;height: 10px;border-radius: 10px;border: 1px solid #fff;background: #333;margin-right: 5px;}
+        .u-btn .on {background: orangered;}
+        .arrow {width:40px;height:60px;display:none;background-color: RGBA(0,0,0,.3);color: #fff;position: absolute;z-index: 3;font-size: 40px;text-align: center;line-height: 60px;}
+        .arrow:hover {background-color: RGBA(0,0,0,.5);}
+        .m-slide:hover .arrow{display: block;}
+        .u-prev {left: 10px;top:170px;}
+        .u-next {right: 10px;top:170px;}
+    </style>
+</head>
+<body>
+
+<div class="m-slide">
+    <div class="u-pic" style="left: -600px;">
+        <img src="http://img.zcool.cn/community/014781554571280000019ae9229893.jpg" alt="1"/>
+        <img src="http://i2.tietuku.com/eb1b93764849baa4s.jpg" alt="1"/>
+        <img src="http://i2.tietuku.com/4c95bf8e0e0404d7s.jpg" alt="2"/>
+        <img src="http://i2.tietuku.com/ae0d4071328522c5s.jpg" alt="3"/>
+        <img src="http://image.rakuten.co.jp/honest/cabinet/shohin5/sn-bath-schoolbus-1.jpg" alt="4"/>
+        <img src="http://img.zcool.cn/community/014781554571280000019ae9229893.jpg" alt="5"/>
+        <img src="http://i2.tietuku.com/eb1b93764849baa4s.jpg" alt="5"/>
+    </div>
+    <div class="u-btn">
+        <span index="1" class="on"></span>
+        <span index="2"></span>
+        <span index="3"></span>
+        <span index="4"></span>
+        <span index="5"></span>
+    </div>
+    <a href="javascript:;" class="u-prev arrow">&lt;</a>
+    <a href="javascript:;" class="u-next arrow">&gt;</a>
+</div>
+<script type="text/javascript">
+
+    window.onload = function () {
+        var slider = document.querySelector(".m-slide"),
+            pics = document.querySelector(".u-pic"),
+            btns = document.querySelectorAll(".u-btn span"),
+            prev = document.querySelector(".u-prev"),
+            next = document.querySelector(".u-next"),
+            index = 1,
+            animated = false,
+            interval = 3000,
+            timer;
+
+        function showBtn(){
+            for(var i = 0;i < btns.length;i++){
+                if(btns[i].className == "on"){
+                    btns[i].className = "";
+                }
+            }
+            btns[index - 1].className = "on";
+        }
+
+        function doAnimate(offset){
+            animated = true;
+            var newLeft = parseInt(pics.style.left) + offset,
+                allTime = 500,
+                interval = 10,
+                speed = offset/(allTime/interval);
+
+            function go(){
+                if((speed < 0 && parseInt(pics.style.left) > newLeft) || (speed > 0 && parseInt(pics.style.left) < newLeft)){
+                    pics.style.left = parseInt(pics.style.left) + speed + "px";
+                    setTimeout(go,interval);
+                }else{
+                    pics.style.left = newLeft + "px";
+                    if(newLeft < -3000){
+                        pics.style.left = -600 + "px";
+                    }
+                    if(newLeft > -600){
+                        pics.style.left = -3000 + "px";
+                    }
+                    animated = false;
+                }
+            }
+            go();
+            
+        }
+
+        function play(){
+            timer = setInterval(function(){
+                next.onclick();
+            },interval);
+        }
+
+        function stop(){
+            clearInterval(timer);
+        }
+
+        next.onclick = function(){
+            if(!animated){
+                doAnimate(-600);
+            }
+            if(index == 5){
+                index = 1;
+            }else{
+                index += 1;
+            }
+            showBtn();
+        }
+
+        prev.onclick = function(){
+            if(!animated){
+                doAnimate(600);
+            }
+            if(index == 5){
+                index = 1;
+            }else{
+                index += 1;
+            }
+            showBtn();
+        }
+
+        for(var i = 0;i < btns.length;i++){
+            btns[i].onclick = function(){
+                if(this.className == "on"){
+                    return;
+                }
+                var currentIndex = this.getAttribute("index"),
+                    offset = -600 * (currentIndex - index);
+                doAnimate(offset);
+                index = currentIndex;
+
+                showBtn();
+
+            }
+        }
+
+        slider.onmouseover = stop;
+        slider.onmouseout = play;
+
+        play();
+    }
+</script>
+</body>
+</html>
