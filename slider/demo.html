@@ -50,19 +50,14 @@
             next = document.querySelector(".u-next"),
             index = 1,
             animated = false,
+            len = 5,
             interval = 3000,
             timer;
 
-        function showBtn(){
-            for(var i = 0;i < btns.length;i++){
-                if(btns[i].className == "on"){
-                    btns[i].className = "";
-                }
-            }
-            btns[index - 1].className = "on";
-        }
-
         function doAnimate(offset){
+            if (offset == 0) {
+                return;
+            }
             animated = true;
             var newLeft = parseInt(pics.style.left) + offset,
                 allTime = 500,
@@ -74,18 +69,29 @@
                     pics.style.left = parseInt(pics.style.left) + speed + "px";
                     setTimeout(go,interval);
                 }else{
+                    
                     pics.style.left = newLeft + "px";
-                    if(newLeft < -3000){
-                        pics.style.left = -600 + "px";
+                    if(newLeft < (-600 * len)){
+                        pics.style.left = "-600px";
                     }
-                    if(newLeft > -600){
-                        pics.style.left = -3000 + "px";
+                    if(newLeft > -200){
+                        pics.style.left = -600 * len + "px";
                     }
                     animated = false;
                 }
             }
             go();
             
+        }
+
+        function showBtn(){
+            for(var i = 0;i < btns.length;i++){
+                if(btns[i].className == "on"){
+                    btns[i].className = "";
+                    break;
+                }
+            }
+            btns[index - 1].className = "on";
         }
 
         function play(){
@@ -99,35 +105,37 @@
         }
 
         next.onclick = function(){
-            if(!animated){
-                doAnimate(-600);
+            if(animated){
+                return;
             }
             if(index == 5){
                 index = 1;
             }else{
                 index += 1;
             }
+            doAnimate(-600);
             showBtn();
         }
 
         prev.onclick = function(){
-            if(!animated){
-                doAnimate(600);
+            if(animated){
+                return;
             }
             if(index == 5){
                 index = 1;
             }else{
                 index += 1;
             }
+            doAnimate(600);
             showBtn();
         }
 
         for(var i = 0;i < btns.length;i++){
             btns[i].onclick = function(){
-                if(this.className == "on"){
+                if(animated || this.className == "on"){
                     return;
                 }
-                var currentIndex = this.getAttribute("index"),
+                var currentIndex = parseInt(this.getAttribute("index")),
                     offset = -600 * (currentIndex - index);
                 doAnimate(offset);
                 index = currentIndex;
