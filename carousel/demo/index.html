@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1">
+  <title>carousel demo</title>
+  <link rel="stylesheet" href="./index.css">
+</head>
+<body>
+  <script>
+    (function (doc, win) {
+      var docEl = doc.documentElement,
+        resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+        isIOS = navigator.userAgent.match(/iphone|ipad|ipod/i),
+        recalc = function () {
+          var clientWidth = docEl.clientWidth;
+          var clientHeight = docEl.clientHeight;
+          if (!clientWidth) return;
+          if(clientWidth >= 750 ){
+            clientWidth = 750;
+            doc.body.style.width = 750 + 'px';
+          }else{
+            doc.body.style.width = clientWidth + 'px';
+          }
+          doc.body.style.height = clientHeight + 'px';
+          docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+          docEl.dataset.percent = 100 * (clientWidth / 750);
+          docEl.dataset.width = clientWidth;
+          docEl.dataset.height = clientHeight;
+        };
+      recalc();
+      isIOS && doc.documentElement.classList.add('iosx' + win.devicePixelRatio);
+      if (!doc.addEventListener) return;
+      win.addEventListener(resizeEvt, recalc, false);
+    })(document, window);
+  </script>
+  <div class="m-slider-footer">
+    <div class="m-carousel">
+      <div class="carousel-logo">
+        <ul class="logo-wrap">
+          <li class="carousel-logo-item" data-index="3">
+            <img src="http://cms-bucket.nosdn.127.net/a17de8f6cba64c14b4640be69ac3195720170509000342.png">
+          </li>
+          <li class="carousel-logo-item" data-index="0">
+            <img src="http://img6.cache.netease.com/image/news_icon.png">
+          </li>
+          <li class="carousel-logo-item" data-index="1">
+            <img src="http://cms-bucket.nosdn.127.net/catchpic/6/6a/6ae057117ada1c53ca205abb67cce4fd.jpg?imageView&amp;thumbnail=550x0">
+          </li>
+          <li class="carousel-logo-item" data-index="2">
+            <img src="http://cms-bucket.nosdn.127.net/7f0fdbc057a54c6186fa677535adb92720170509163124.png">
+          </li>
+          <li class="carousel-logo-item" data-index="3">
+            <img src="http://cms-bucket.nosdn.127.net/a17de8f6cba64c14b4640be69ac3195720170509000342.png">
+          </li>
+          <li class="carousel-logo-item" data-index="0">
+            <img src="http://img6.cache.netease.com/image/news_icon.png">
+          </li>
+        </ul>
+      </div>
+      <div class="carousel-news">
+        <ul class="carousel-wrap">
+          <li class="carousel-wrap-item" data-index="3">
+            <p>致咪蒙：为什么我反对实习生休学</p>
+          </li>
+          <li class="carousel-wrap-item" data-index="0">
+            <div class="logo-info">
+              <p class="p1">网易新闻</p>
+              <p class="p2">为4亿人新闻阅读而生</p>
+            </div>
+          </li>
+          <li class="carousel-wrap-item" data-index="1">
+            <p>已婚老太网恋1年被骗60余万 事后发现对方是女婿</p>
+          </li>
+          <li class="carousel-wrap-item" data-index="2">
+            <p>校车在山东隧道内起火11名幼儿遇难 5人为韩籍</p>
+          </li>
+          <li class="carousel-wrap-item" data-index="3">
+            <p>致咪蒙：为什么我反对实习生休学</p>
+          </li>
+          <li class="carousel-wrap-item" data-index="0">
+            <div class="logo-info">
+              <p class="p1">网易新闻</p>
+              <p class="p2">为4亿人新闻阅读而生</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <ul class="carousel-dots">
+        <li class=""></li>
+        <li class=""></li>
+        <li class=""></li>
+        <li class="on"></li>
+      </ul>
+    </div>
+    <div class="footer-open">
+      <div class="open">打开</div>
+    </div>
+  </div>
+  
+  <script type="text/javascript" src="./index.js"></script>
+  <script>
+    Slider('.m-carousel', {
+      childSliders: ['.carousel-logo ul', '.carousel-news ul'],
+      btns: '.carousel-dots',
+      isAutoPlay: true
+    })
+  </script>
+</body>
+</html>
